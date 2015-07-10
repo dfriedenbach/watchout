@@ -19,6 +19,7 @@ d3Enemies.enter()
 
 setInterval(function(){
   d3Enemies.transition()
+    .duration(1000)
     .attr('cx', function(d){return Math.random() * $('.gameboard').width()})
     .attr('cy', function(d){return Math.random() * $('.gameboard').height()})
 }, 1000);
