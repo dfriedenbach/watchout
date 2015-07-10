@@ -2,4 +2,12 @@
 
 /* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
-
+.asteroid circle {
+  background-image: "asteroid.png"
+}
+.gameboard {
+  width: 800px;
+  height: 600px;
+  border: 1px solid black;
+  margin: auto;
+}
