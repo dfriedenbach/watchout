@@ -1,4 +1,8 @@
 // start slingin' some d3 here.
+var score = 0;
+var highScore = 0;
+var collisions = 0;
+
 var enemies = [];
 for(var i = 0 ; i < 10; i++){
   enemies.push({
@@ -50,6 +54,8 @@ d3.select('.gameboard').selectAll('.player')
     .call(drag);
 
 setInterval(function(){
+  var collision = false;
+
   d3.selectAll('.asteroid').each(function(d, i){
     var x = this.getAttribute('cx') - player.x;
     var y = this.getAttribute('cy') - player.y;
@@ -58,9 +64,24 @@ setInterval(function(){
     var threshold = Number(player.r) + Number(this.getAttribute('r'));
 
     if(distance <= threshold){
-      console.log("Ka blam");
+      collision = true;
     }
+  });
 
-    
-  })
+  if(collision){
+    if(score) {
+      collisions++;
+    }
+    score = 0;
+    d3.select('.collisions span').text(collisions);
+    d3.select('.current span').text(score);
+  } else {
+    score++;
+    if(score > highScore){
+      highScore = score;
+      d3.select('.high span').text(highScore);
+    }
+    d3.select('.current span').text(score); 
+  }
+
 }, 30)
