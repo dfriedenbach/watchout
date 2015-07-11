@@ -11,13 +11,14 @@ var randomizePosition = function(object){
 }
 
 var enemies = [];
+// Generate enemy data
 for(var i = 0 ; i < 10; i++){
   enemies.push(randomizePosition({
     r: 15,
     id: i
   }));
-
 }
+
 var d3Enemies = d3.select('.gameboard').selectAll('.enemy').data(enemies);
 
 d3Enemies.enter()
