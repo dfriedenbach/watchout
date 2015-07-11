@@ -7,8 +7,8 @@ var enemySize = 50;
 var enemies = [];
 for(var i = 0 ; i < 10; i++){
   enemies.push({
-    x: Math.random() * $('.gameboard').width(),
-    y: Math.random() * $('.gameboard').height(),
+    x: Math.random() * $('.gameboard').width() - enemySize / 2,
+    y: Math.random() * $('.gameboard').height() - enemySize / 2,
     r: 15,
     id: i
   });
@@ -28,8 +28,8 @@ d3Enemies.enter()
 setInterval(function(){
   d3Enemies.transition()
     .duration(1000)
-    .attr('x', function(d){return Math.random() * $('.gameboard').width()})
-    .attr('y', function(d){return Math.random() * $('.gameboard').height()})
+    .attr('x', function(d){return Math.random() * $('.gameboard').width() - enemySize / 2})
+    .attr('y', function(d){return Math.random() * $('.gameboard').height() - enemySize / 2})
 }, 1000);
 
 var player = {
@@ -41,8 +41,9 @@ var player = {
 var drag = d3.behavior.drag();
 drag.on('drag', function(d){
   d3.select(this)
-    .attr('cx', d.x = d3.event.x)
-    .attr('cy', d.y = d3.event.y);
+    // Set player position within bounds of game board
+    .attr('cx', d.x = Math.max(0 + player.r, Math.min($('.gameboard').width() - player.r, d3.event.x)))
+    .attr('cy', d.y = Math.max(0 + player.r, Math.min($('.gameboard').height() - player.r, d3.event.y)));
 });
 
 
