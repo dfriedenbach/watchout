@@ -4,14 +4,19 @@ var highScore = 0;
 var collisions = 0;
 var enemySize = 50;
 
+var randomizePosition = function(object){
+  object.x = Math.random() * $('.gameboard').width() - enemySize / 2;
+  object.y = Math.random() * $('.gameboard').height() - enemySize / 2;
+  return object;
+}
+
 var enemies = [];
 for(var i = 0 ; i < 10; i++){
-  enemies.push({
-    x: Math.random() * $('.gameboard').width() - enemySize / 2,
-    y: Math.random() * $('.gameboard').height() - enemySize / 2,
+  enemies.push(randomizePosition({
     r: 15,
     id: i
-  });
+  }));
+
 }
 var d3Enemies = d3.select('.gameboard').selectAll('.enemy').data(enemies);
 
@@ -26,10 +31,13 @@ d3Enemies.enter()
   .attr('r', function(d){return d.r});
 
 setInterval(function(){
+  enemies.forEach(function(enemy){
+    randomizePosition(enemy);
+  })
   d3Enemies.transition()
     .duration(1000)
-    .attr('x', function(d){return Math.random() * $('.gameboard').width() - enemySize / 2})
-    .attr('y', function(d){return Math.random() * $('.gameboard').height() - enemySize / 2})
+    .attr('x', function(d){return d.x})
+    .attr('y', function(d){return d.y})
 }, 1000);
 
 var player = {
