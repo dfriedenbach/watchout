@@ -10,7 +10,7 @@ Feel free to use it if you like. */
 }
 
 .rotate {
-  -webkit-animation-duration: 0.5s;
+  -webkit-animation-duration: 0.3s;
   -webkit-animation-iteration-count: infinite;
   -webkit-animation-name: rotate;
 }
