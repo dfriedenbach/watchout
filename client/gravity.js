@@ -5,20 +5,22 @@ var setupMode = true;
 var boardWidth = $('.gameboard').width();
 var boardHeight = $('.gameboard').height();
 
+var radius = 10
+var initialVx = 5;
+var initialVy = 0;
+
 var player = {
-  x: 10,
-  y: 10,
-  vx: 5,
-  vy: 0,
-  r: 10
+  x: radius,
+  y: radius,
+  vx: initialVx,
+  vy: initialVy,
+  r: radius
 }
 var goal = {
-  x: boardWidth - 10,
-  y: boardHeight - 10,
-  r: 10
+  x: boardWidth - radius,
+  y: boardHeight - radius,
+  r: radius
 }
-
-
 
 var attract = function(playerX, playerY){
   var dX = this.x - playerX;
@@ -34,12 +36,12 @@ var attract = function(playerX, playerY){
 }
 
 var fields = [];
-for (var i = 0; i < 2; i++) {
+for (var i = 0; i < 100; i++) {
   fields.push({
     x: Math.random() * boardWidth,
     y: Math.random() * boardHeight,
     calculateEffect: attract,
-    r: 10
+    r: radius
   });
 }
 
@@ -83,31 +85,48 @@ d3Fields.enter()
 d3.select('.start').on('click', function() {
   setupMode = false;
 });
+d3.select('.reset').on('click', function() {
+  setupMode = true;
+  player.x = player.r;
+  player.y = player.r;
+  player.vx = initialVx;
+  player.vy = initialVy;
+  d3player.transition()
+    .attr('cx', function(d){return d.x})
+    .attr('cy', function(d){return d.y});
+});
 
 setInterval(function(){
   if (!setupMode) {
-    fields.forEach(function(field, i){
-      var effect = field.calculateEffect(player.x, player.y);
-      player.vx += effect[0];
-      player.vy += effect[1];
-    });
+// when not in setup mode, check for collision with goal
+    var dX = goal.x - player.x;
+    var dY = goal.y - player.y;
+    var distance = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
+    if (distance < 2 * radius) {
+      setupMode = true;
+      alert('You win!');
+    } else {
+  // else
+    // calculate delta-v of player resulting from interactions with all fields
+      fields.forEach(function(field, i){
+        var effect = field.calculateEffect(player.x, player.y);
+        player.vx += effect[0];
+        player.vy += effect[1];
+      });
 
-    player.x += player.vx;
-    player.y += player.vy;
-    d3player.transition()
-      .duration(33)
-      .attr('cx', function(d){return d.x})
-      .attr('cy', function(d){return d.y})
+    // transition player to new position resulting from adjusted velocity
+      player.x += player.vx;
+      player.y += player.vy;
+      d3player.transition()
+        .duration(33)
+        .attr('cx', function(d){return d.x})
+        .attr('cy', function(d){return d.y});
+    }
   }
 }, 33);
 
 
 // allow moving of fields in while board is in setup mode
-  // ADD THIS LATER
-// when not in setup mode, check for collision with goal
 // if goal collision detected  
   // win!
-// else
-  // calculate delta-v of player resulting from interactions with all fields
-  // transition player to new position resulting from adjusted velocity
 
