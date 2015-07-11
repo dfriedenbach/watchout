@@ -13,14 +13,14 @@ for(var i = 0 ; i < 10; i++){
     id: i
   });
 }
-var d3Enemies = d3.select('.gameboard').selectAll('.asteroid').data(enemies);
+var d3Enemies = d3.select('.gameboard').selectAll('.enemy').data(enemies);
 
 d3Enemies.enter()
   .append('svg:image')
   .attr('xlink:href', 'Shuriken.png')
   .attr('height', enemySize)
   .attr('width', enemySize)
-  .attr('class', 'asteroid')
+  .attr('class', 'enemy rotate')
   .attr('x', function(d){return d.x})
   .attr('y', function(d){return d.y})
   .attr('r', function(d){return d.r});
@@ -59,7 +59,7 @@ d3.select('.gameboard').selectAll('.player')
 setInterval(function(){
   var collision = false;
 
-  d3.selectAll('.asteroid').each(function(d, i){
+  d3.selectAll('.enemy').each(function(d, i){
     var x = this.getAttribute('x') - player.x + enemySize / 2;
     var y = this.getAttribute('y') - player.y + enemySize / 2;
 

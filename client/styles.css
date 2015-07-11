@@ -2,12 +2,42 @@
 
 /* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
-.asteroid circle {
-  background-image: "asteroid.png"
-}
 .gameboard {
   width: 800px;
   height: 600px;
   border: 1px solid black;
   margin: auto;
+}
+
+.rotate {
+  -webkit-animation-duration: 0.5s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-name: rotate;
+}
+
+@-webkit-keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+    transform-origin: 50% 50%;
+  }
+
+  25% {
+    transform: rotate(90deg);
+    transform-origin: 50% 50%;
+  }
+
+  50% {
+    transform: rotate(180deg);
+    transform-origin: 50% 50%;
+  }
+
+  75% {
+    transform: rotate(270deg);
+    transform-origin: 50% 50%;
+  }
+
+  100% {
+    transform: rotate(360deg);
+    transform-origin: 50% 50%;
+  }
 }
