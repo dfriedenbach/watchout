@@ -2,31 +2,34 @@
 var score = 0;
 var highScore = 0;
 var collisions = 0;
+var enemySize = 50;
 
 var enemies = [];
 for(var i = 0 ; i < 10; i++){
   enemies.push({
     x: Math.random() * $('.gameboard').width(),
     y: Math.random() * $('.gameboard').height(),
-    r: 25,
+    r: 15,
     id: i
   });
 }
 var d3Enemies = d3.select('.gameboard').selectAll('.asteroid').data(enemies);
 
 d3Enemies.enter()
-  .append('circle')
+  .append('svg:image')
+  .attr('xlink:href', 'Shuriken.png')
+  .attr('height', enemySize)
+  .attr('width', enemySize)
   .attr('class', 'asteroid')
-  .attr('cx', function(d){return d.x})
-  .attr('cy', function(d){return d.y})
-  .attr('r', function(d){return d.r})
-  .style('fill', 'black');
+  .attr('x', function(d){return d.x})
+  .attr('y', function(d){return d.y})
+  .attr('r', function(d){return d.r});
 
 setInterval(function(){
   d3Enemies.transition()
     .duration(1000)
-    .attr('cx', function(d){return Math.random() * $('.gameboard').width()})
-    .attr('cy', function(d){return Math.random() * $('.gameboard').height()})
+    .attr('x', function(d){return Math.random() * $('.gameboard').width()})
+    .attr('y', function(d){return Math.random() * $('.gameboard').height()})
 }, 1000);
 
 var player = {
@@ -57,8 +60,8 @@ setInterval(function(){
   var collision = false;
 
   d3.selectAll('.asteroid').each(function(d, i){
-    var x = this.getAttribute('cx') - player.x;
-    var y = this.getAttribute('cy') - player.y;
+    var x = this.getAttribute('x') - player.x + enemySize / 2;
+    var y = this.getAttribute('y') - player.y + enemySize / 2;
 
     var distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
     var threshold = Number(player.r) + Number(this.getAttribute('r'));
