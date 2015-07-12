@@ -5,6 +5,11 @@ var setupMode = true;
 var boardWidth = $('.gameboard').width();
 var boardHeight = $('.gameboard').height();
 
+d3.select('.gameboard').select('.win')
+  .attr('x', boardWidth / 2 - 80)
+  .attr('y', boardHeight / 2)
+  .attr('fill-opacity', 0);
+
 var radius = 10
 var initialVx = 5;
 var initialVy = 0;
@@ -29,14 +34,14 @@ var attract = function(playerX, playerY){
 
   var force = 1000 / Math.pow(distance, 2);
 
-  var changeVx = force * dX / distance;
-  var changeVy = force * dY / distance;
+  var changeVx = distance < radius ? 0 : force * dX / distance;
+  var changeVy = distance < radius ? 0 : force * dY / distance;
 
   return [changeVx, changeVy];
 }
 
 var fields = [];
-for (var i = 0; i < 100; i++) {
+for (var i = 0; i < 1; i++) {
   fields.push({
     x: Math.random() * boardWidth,
     y: Math.random() * boardHeight,
@@ -94,6 +99,7 @@ d3.select('.reset').on('click', function() {
   d3player.transition()
     .attr('cx', function(d){return d.x})
     .attr('cy', function(d){return d.y});
+  d3.select('.win').transition().duration(1000).attr('fill-opacity', 0);
 });
 
 setInterval(function(){
@@ -104,7 +110,7 @@ setInterval(function(){
     var distance = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
     if (distance < 2 * radius) {
       setupMode = true;
-      alert('You win!');
+      d3.select('.win').transition().duration(1000).attr('fill-opacity', 1);
     } else {
   // else
     // calculate delta-v of player resulting from interactions with all fields
@@ -117,6 +123,12 @@ setInterval(function(){
     // transition player to new position resulting from adjusted velocity
       player.x += player.vx;
       player.y += player.vy;
+      // if (player.x < 0 || player.x > boardWidth) {
+      //   player.vx *= -1;
+      // }
+      // if (player.y < 0 || player.y > boardHeight) {
+      //   player.vy *= -1;
+      // }
       d3player.transition()
         .duration(33)
         .attr('cx', function(d){return d.x})
